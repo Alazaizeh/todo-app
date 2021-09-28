@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 
 export const SettingsContext = React.createContext();
 
 export default function SettingsProvider(props) {
+  const [itemsPerPage, setitemsPerPage] = useState(3);
+  const [showCompleted, setshowCompleted] = useState(false);
   const state = {
-    showCompleted: false,
-    itemsPerPage: 3,
+    showCompleted,
+    setshowCompleted,
+    itemsPerPage,
+    setitemsPerPage,
     sortString: "",
   };
 

@@ -2,19 +2,27 @@ import React, { useEffect, useState, useContext } from "react";
 import useForm from "../../hooks/form.js";
 import Settings from "../../context/setting.js";
 import { v4 as uuid } from "uuid";
-import todoItem from "../List.js";
-import Form from "../Form";
+import Header from "../header";
+import Form from "./Form";
 import List from "../List";
+
 const ToDo = () => {
   const context = useContext(Settings);
   const [list, setList] = useState([]);
   const [incomplete, setIncomplete] = useState([]);
   const { handleChange, handleSubmit } = useForm(addItem);
+  useEffect(() => {
+    localStorage.getItem("items")
+      ? setList(JSON.parse(localStorage.getItem("items")))
+      : null;
+  }, []);
 
   function addItem(item) {
+    item["difficulty"] ? null : (item["difficulty"] = 3);
     console.log(item);
     item.id = uuid();
     item.complete = false;
+    localStorage.setItem("items", JSON.stringify([...list, item]));
     setList([...list, item]);
   }
 
@@ -42,10 +50,7 @@ const ToDo = () => {
 
   return (
     <>
-      <header>
-        <h1>To Do List: {incomplete} items pending</h1>
-      </header>
-
+      <Header incomplete={incomplete} />
       <Form handleChange={handleChange} handleSubmit={handleSubmit} />
       <List list={list} toggleComplete={toggleComplete} />
     </>
